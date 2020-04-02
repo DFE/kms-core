@@ -96,6 +96,12 @@ generic_find(LIBNAME sigc++-2.0 VERSION ${SIGCPP_REQUIRED} REQUIRED)
 generic_find(LIBNAME glibmm-2.4 VERSION ${GLIBMM_REQUIRED} REQUIRED)
 generic_find(LIBNAME uuid REQUIRED)
 
+if(MSYS)
+  # MSYS2 installs as part of the Linux utils its own variant of libuuid that is
+  # not compatible with the expected one. Specify explicitly where to look for it.
+  set(uuid_LIBRARIES -L"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" ${uuid_LIBRARIES})
+endif()
+
 find_package(LibVpx REQUIRED)
 
 set(CMAKE_INSTALL_GST_PLUGINS_DIR ${CMAKE_INSTALL_LIBDIR}/gstreamer-1.0)

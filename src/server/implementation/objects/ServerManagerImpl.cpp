@@ -18,7 +18,11 @@
 #include "ServerInfo.hpp"
 #include "MediaPipelineImpl.hpp"
 #include "ServerManagerImpl.hpp"
+#ifdef _WIN32
+#include "process-tools/windows-process.hpp"
+#else
 #include "process-tools/linux-process.hpp"
+#endif
 #include <jsonrpc/JsonSerializer.hpp>
 #include <KurentoException.hpp>
 #include <MediaSet.hpp>
@@ -107,7 +111,7 @@ std::string ServerManagerImpl::getKmd (const std::string &moduleName)
 int
 ServerManagerImpl::getCpuCount ()
 {
-  return (int)cpuCount ();
+  return (int) cpuCount ();
 }
 
 float
@@ -115,7 +119,7 @@ ServerManagerImpl::getUsedCpu (int interval)
 {
   struct ::cpustat_t cpustat;
   cpuPercentBegin (&cpustat);
-  std::this_thread::sleep_for (std::chrono::milliseconds (interval));
+  std::this_thread::sleep_for (std::chrono::milliseconds (interval) );
   return cpuPercentEnd (&cpustat);
 }
 

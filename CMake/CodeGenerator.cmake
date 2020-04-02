@@ -69,7 +69,7 @@ function (execute_code_generator)
   endforeach()
 
   execute_process(
-    COMMAND ${KurentoModuleCreator_EXECUTABLE} ${PARAM_EXEC_PARAMS}
+    COMMAND sh ${KurentoModuleCreator_EXECUTABLE} ${PARAM_EXEC_PARAMS}
     OUTPUT_VARIABLE PROCESSOR_OUTPUT
     ERROR_VARIABLE PROCESSOR_ERROR
     RESULT_VARIABLE PROCESSOR_RET
@@ -243,7 +243,7 @@ function (generate_sources)
       add_custom_command(
         OUTPUT  ${PARAM_INTERNAL_TEMPLATES_DIR}.generated ${GENERATED_SOURCE_FILES} ${GENERATED_HEADER_FILES}
         COMMAND ${CMAKE_COMMAND} -E touch ${PARAM_INTERNAL_TEMPLATES_DIR}.generated
-        COMMAND ${KurentoModuleCreator_EXECUTABLE} ${COMMAND_LINE}
+        COMMAND sh ${KurentoModuleCreator_EXECUTABLE} ${COMMAND_LINE}
         DEPENDS ${MODEL_FILES} kurento-module-creator ${KurentoModuleCreator_EXECUTABLE}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       )
@@ -251,7 +251,7 @@ function (generate_sources)
       add_custom_command(
         OUTPUT  ${PARAM_INTERNAL_TEMPLATES_DIR}.generated ${GENERATED_SOURCE_FILES} ${GENERATED_HEADER_FILES}
         COMMAND ${CMAKE_COMMAND} -E touch ${PARAM_INTERNAL_TEMPLATES_DIR}.generated
-        COMMAND ${KurentoModuleCreator_EXECUTABLE} ${COMMAND_LINE}
+        COMMAND sh ${KurentoModuleCreator_EXECUTABLE} ${COMMAND_LINE}
         DEPENDS ${MODEL_FILES}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       )
@@ -650,7 +650,7 @@ function (generate_kurento_libraries)
   )
 
   file (WRITE ${CMAKE_CURRENT_BINARY_DIR}/generate_kmd_include.cmake
-"  execute_process (COMMAND ${KurentoModuleCreator_EXECUTABLE} -r ${PARAM_MODELS} ${KURENTO_MODULES_DIR_LINE} -o ${CMAKE_CURRENT_BINARY_DIR}/)
+"  execute_process (COMMAND sh ${KurentoModuleCreator_EXECUTABLE} -r ${PARAM_MODELS} ${KURENTO_MODULES_DIR_LINE} -o ${CMAKE_CURRENT_BINARY_DIR}/)
 
   file (READ ${CMAKE_CURRENT_BINARY_DIR}/${VALUE_NAME}.kmd.json KMD_DATA)
 
