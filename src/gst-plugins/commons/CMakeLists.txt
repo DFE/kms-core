@@ -19,6 +19,10 @@ set_property(TARGET sdputils
     ${gstreamer-pbutils-1.0_INCLUDE_DIRS}
 )
 
+if(MSYS)
+  set(TARGET_OS_LINK_LIBRARIES ws2_32)
+endif()
+
 target_link_libraries(sdputils
   ${gstreamer-1.0_LIBRARIES}
   ${gstreamer-base-1.0_LIBRARIES}
@@ -92,6 +96,7 @@ target_link_libraries(kmsutils
   ${gstreamer-pbutils-1.0_LIBRARIES}
   ${gstreamer-video-1.0_LIBRARIES}
   ${uuid_LIBRARIES}
+  ${TARGET_OS_LINK_LIBRARIES}
 )
 
 install(
@@ -197,6 +202,7 @@ target_link_libraries(kmsgstcommons
   sdputils
   kmsrefstruct
   kmssdpagent
+  ${TARGET_OS_LINK_LIBRARIES}
   ${gstreamer-1.0_LIBRARIES}
   ${gstreamer-base-1.0_LIBRARIES}
   ${gstreamer-sdp-1.0_LIBRARIES}

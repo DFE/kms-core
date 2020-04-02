@@ -97,17 +97,20 @@ BaseRtpEndpointImpl::BaseRtpEndpointImpl (const boost::property_tree::ptree
   connStateChangedHandlerId = 0;
 
   guint minPort = 0;
-  if (getConfigValue<guint, BaseRtpEndpoint> (&minPort, PARAM_MIN_PORT)) {
+
+  if (getConfigValue<guint, BaseRtpEndpoint> (&minPort, PARAM_MIN_PORT) ) {
     g_object_set (getGstreamerElement (), PROP_MIN_PORT, minPort, NULL);
   }
 
   guint maxPort = 0;
-  if (getConfigValue <guint, BaseRtpEndpoint> (&maxPort, PARAM_MAX_PORT)) {
+
+  if (getConfigValue <guint, BaseRtpEndpoint> (&maxPort, PARAM_MAX_PORT) ) {
     g_object_set (getGstreamerElement (), PROP_MAX_PORT, maxPort, NULL);
   }
 
   guint mtu;
-  if (getConfigValue <guint, BaseRtpEndpoint> (&mtu, PARAM_MTU)) {
+
+  if (getConfigValue <guint, BaseRtpEndpoint> (&mtu, PARAM_MTU) ) {
     GST_INFO ("Predefined RTP MTU: %u", mtu);
     g_object_set (G_OBJECT (element), PROP_MTU, mtu, NULL);
   } else {
@@ -151,12 +154,12 @@ BaseRtpEndpointImpl::updateMediaState (guint new_state)
   if (old_state->getValue() != current_media_state->getValue() ) {
     try {
       MediaStateChanged event (shared_from_this (),
-          MediaStateChanged::getName (), old_state, current_media_state);
-      sigcSignalEmit(signalMediaStateChanged, event);
+                               MediaStateChanged::getName (), old_state, current_media_state);
+      sigcSignalEmit (signalMediaStateChanged, event);
     } catch (const std::bad_weak_ptr &e) {
       // shared_from_this()
       GST_ERROR ("BUG creating %s: %s", MediaStateChanged::getName ().c_str (),
-          e.what ());
+                 e.what () );
     }
   }
 }
@@ -186,12 +189,12 @@ BaseRtpEndpointImpl::updateConnectionState (gchar *sessId, guint new_state)
   if (old_state->getValue() != current_conn_state->getValue() ) {
     try {
       ConnectionStateChanged event (shared_from_this(),
-          ConnectionStateChanged::getName (), old_state, current_conn_state);
-      sigcSignalEmit(signalConnectionStateChanged, event);
+                                    ConnectionStateChanged::getName (), old_state, current_conn_state);
+      sigcSignalEmit (signalConnectionStateChanged, event);
     } catch (const std::bad_weak_ptr &e) {
       // shared_from_this()
       GST_ERROR ("BUG creating %s: %s",
-          ConnectionStateChanged::getName ().c_str (), e.what ());
+                 ConnectionStateChanged::getName ().c_str (), e.what () );
     }
   }
 }
@@ -497,7 +500,7 @@ createRTCRTPStreamStats (guint nackSent, guint nackRecv,
   std::shared_ptr<RTCRTPStreamStats> rtcStats;
   gboolean isInternal;
   gchar *ssrcStr, *id;
-  uint ssrc, nackCount;
+  guint ssrc, nackCount;
 
   gst_structure_get (stats, "ssrc", G_TYPE_UINT, &ssrc, "internal",
                      G_TYPE_BOOLEAN, &isInternal, "id", G_TYPE_STRING, &id, NULL);
@@ -617,9 +620,9 @@ setDeprecatedProperties (std::shared_ptr<EndpointStats> eStats)
 
   for (auto &inStat : inStats) {
     if (inStat->getName() == "sink_audio_default") {
-      eStats->setAudioE2ELatency(inStat->getAvg());
+      eStats->setAudioE2ELatency (inStat->getAvg() );
     } else if (inStat->getName() == "sink_video_default") {
-      eStats->setVideoE2ELatency(inStat->getAvg());
+      eStats->setVideoE2ELatency (inStat->getAvg() );
     }
   }
 }

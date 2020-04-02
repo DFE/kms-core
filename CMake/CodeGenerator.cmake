@@ -698,11 +698,21 @@ function (generate_kurento_libraries)
     ${VALUE_CODE_IMPLEMENTATION_LIB}impl
   )
 
-  target_link_libraries (${VALUE_CODE_IMPLEMENTATION_LIB}module
-    ${VALUE_CODE_IMPLEMENTATION_LIB}impl
-    ${VALUE_CODE_IMPLEMENTATION_LIB}interface
-    ${PARAM_MODULE_EXTRA_LIBRARIES}
-  )
+  if(MSYS)
+    # on MSYS2 the interface library needs to be before the
+    # implementation library
+    target_link_libraries (${VALUE_CODE_IMPLEMENTATION_LIB}module
+      ${VALUE_CODE_IMPLEMENTATION_LIB}interface
+      ${VALUE_CODE_IMPLEMENTATION_LIB}impl
+      ${PARAM_MODULE_EXTRA_LIBRARIES}
+    )
+  else()
+    target_link_libraries (${VALUE_CODE_IMPLEMENTATION_LIB}module
+      ${VALUE_CODE_IMPLEMENTATION_LIB}impl
+      ${VALUE_CODE_IMPLEMENTATION_LIB}interface
+      ${PARAM_MODULE_EXTRA_LIBRARIES}
+    )
+  endif()
 
   set_property (TARGET ${VALUE_CODE_IMPLEMENTATION_LIB}module
     PROPERTY INCLUDE_DIRECTORIES
