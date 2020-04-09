@@ -43,8 +43,8 @@ ModuleManager::loadModule (std::string modulePath)
 {
   const kurento::FactoryRegistrar *registrar;
   void *registrarFactory, *getVersion = nullptr, *getName = nullptr,
-                           *getDescriptor = nullptr,
-                            *getGenerationTime = nullptr;
+                          *getDescriptor = nullptr,
+                          *getGenerationTime = nullptr;
   std::string moduleFileName;
   std::string moduleName;
   std::string moduleVersion;
@@ -70,7 +70,7 @@ ModuleManager::loadModule (std::string modulePath)
 
   if (!module.get_symbol ("getFactoryRegistrar", registrarFactory) ) {
     GST_DEBUG ("Symbol 'getFactoryRegistrar' not found in library %s",
-               moduleFileName.c_str() );
+                 moduleFileName.c_str() );
     return -1;
   }
 
@@ -132,8 +132,8 @@ ModuleManager::loadModule (std::string modulePath)
     generationTime = ( (GetGenerationTimeFunc) getGenerationTime) ();
   }
 
-  loadedModules[moduleFileName] = std::make_shared<ModuleData> (
-                                    moduleName, moduleVersion, generationTime, moduleDescriptor, factories);
+  loadedModules[moduleFileName] = std::make_shared<ModuleData>(
+      moduleName, moduleVersion, generationTime, moduleDescriptor, factories);
 
   GST_INFO ("Loaded module: %s, version: %s, date: %s", moduleName.c_str(),
             moduleVersion.c_str(), generationTime.c_str() );

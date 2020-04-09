@@ -18,7 +18,7 @@
 #include "kmsrtpsynchronizer.h"
 #include <glib/gstdio.h>
 
-#include <sys/stat.h>           // 'ACCESSPERMS' is not POSIX, requires GNU extensions in GCC
+#include <sys/stat.h>  // 'ACCESSPERMS' is not POSIX, requires GNU extensions in GCC
 // 'ACCESSPERMS' is not available on MSYS2
 #ifndef ACCESSPERMS
 #define ACCESSPERMS (S_IRWXU|S_IRWXG|S_IRWXO)
@@ -61,7 +61,7 @@ struct _KmsRtpSynchronizerPrivate
   GstClockTime base_ntp_time;
   GstClockTime base_sync_time;
 
-  guint64 rtp_ext_ts;           // Extended timestamp: robust against input wraparound
+  guint64 rtp_ext_ts; // Extended timestamp: robust against input wraparound
   guint64 last_sr_rtp_ext_ts;
   GstClockTime last_sr_ntp_time;
 
@@ -121,8 +121,8 @@ kms_rtp_synchronizer_init (KmsRtpSynchronizer * self)
   g_mutex_init (&self->priv->stats_mutex);
 
   // 'gst_rtp_buffer_ext_timestamp()' requires an initial value of -1
-  self->priv->rtp_ext_ts = (guint64) - 1;       // == G_MAXUINT64
-  self->priv->fs_last_rtp_ext_ts = (guint64) - 1;
+  self->priv->rtp_ext_ts = (guint64)-1;  // == G_MAXUINT64
+  self->priv->fs_last_rtp_ext_ts = (guint64)-1;
 
   self->priv->fs_last_pts_time = GST_CLOCK_TIME_NONE;
 }
@@ -236,7 +236,6 @@ kms_rtp_synchronizer_process_rtcp_packet (KmsRtpSynchronizer * self,
   GstClockTime ntp_time;
 
   const GstRTCPType type = gst_rtcp_packet_get_type (packet);
-
   if (type != GST_RTCP_TYPE_SR) {
     GST_DEBUG_OBJECT (self, "Ignore RTCP packet, type: %d", type);
     return;
@@ -332,7 +331,8 @@ kms_rtp_synchronizer_rtp_diff_full (KmsRtpSynchronizer * self,
     } else {
       GST_BUFFER_PTS (buffer) += diff_rtp_time;
     }
-  } else if (self->priv->rtp_ext_ts < base_ext_ts) {
+  }
+  else if (self->priv->rtp_ext_ts < base_ext_ts) {
     diff_rtp_ext_ts = base_ext_ts - self->priv->rtp_ext_ts;
     diff_rtp_time =
         gst_util_uint64_scale_int (diff_rtp_ext_ts, GST_SECOND, clock_rate);
@@ -350,7 +350,8 @@ kms_rtp_synchronizer_rtp_diff_full (KmsRtpSynchronizer * self,
     } else {
       GST_BUFFER_PTS (buffer) -= diff_rtp_time;
     }
-  } else {                      /* if equals */
+  }
+  else {                      /* if equals */
     if (wrapped_down) {
       GST_WARNING_OBJECT (self, "PTS wrapped down, setting to 0");
       GST_BUFFER_PTS (buffer) = 0;
@@ -410,7 +411,8 @@ kms_rtp_synchronizer_process_rtp_buffer_mapped (KmsRtpSynchronizer * self,
 
   if (self->priv->ssrc == 0) {
     self->priv->ssrc = ssrc;
-  } else if (ssrc != self->priv->ssrc) {
+  }
+  else if (ssrc != self->priv->ssrc) {
     gchar *msg = g_strdup_printf ("Invalid SSRC (%u), not matching with %u",
         ssrc, self->priv->ssrc);
 
@@ -427,12 +429,12 @@ kms_rtp_synchronizer_process_rtp_buffer_mapped (KmsRtpSynchronizer * self,
   pt = gst_rtp_buffer_get_payload_type (rtp_buffer);
   if (pt != self->priv->pt || self->priv->clock_rate <= 0) {
     gchar *msg;
-
     if (pt != self->priv->pt) {
       msg =
           g_strdup_printf ("Unknown PT: %u, expected: %u", pt, self->priv->pt);
     } else {
-      msg = g_strdup_printf ("Invalid clock-rate: %d", self->priv->clock_rate);
+      msg =
+          g_strdup_printf ("Invalid clock-rate: %d", self->priv->clock_rate);
     }
 
     GST_ERROR_OBJECT (self, "%s", msg);
@@ -450,7 +452,7 @@ kms_rtp_synchronizer_process_rtp_buffer_mapped (KmsRtpSynchronizer * self,
   gst_rtp_buffer_ext_timestamp (&self->priv->rtp_ext_ts, rtp_ts);
 
   if (self->priv->feeded_sorted) {
-    if (self->priv->fs_last_rtp_ext_ts != (guint64) - 1
+    if (self->priv->fs_last_rtp_ext_ts != (guint64) -1
         && self->priv->rtp_ext_ts < self->priv->fs_last_rtp_ext_ts) {
       guint16 seq = gst_rtp_buffer_get_seq (rtp_buffer);
       gchar *msg =
@@ -468,7 +470,8 @@ kms_rtp_synchronizer_process_rtp_buffer_mapped (KmsRtpSynchronizer * self,
 
       self->priv->feeded_sorted = FALSE;
       ret = FALSE;
-    } else if (self->priv->rtp_ext_ts == self->priv->fs_last_rtp_ext_ts) {
+    }
+    else if (self->priv->rtp_ext_ts == self->priv->fs_last_rtp_ext_ts) {
       if (GST_CLOCK_TIME_IS_VALID (self->priv->fs_last_pts_time)) {
         GST_BUFFER_PTS (buffer) = self->priv->fs_last_pts_time;
       }
@@ -484,12 +487,14 @@ kms_rtp_synchronizer_process_rtp_buffer_mapped (KmsRtpSynchronizer * self,
       self->priv->base_interpolate_ext_ts = self->priv->rtp_ext_ts;
       self->priv->base_interpolate_time = GST_BUFFER_PTS (buffer);
       self->priv->base_interpolate_initiated = TRUE;
-    } else {
+    }
+    else {
       GST_BUFFER_PTS (buffer) = self->priv->base_interpolate_time;
       kms_rtp_synchronizer_rtp_diff (self, rtp_buffer, self->priv->clock_rate,
           self->priv->base_interpolate_ext_ts);
     }
-  } else {
+  }
+  else {
     gboolean wrapped_down, wrapped_up;
 
     wrapped_down = wrapped_up = FALSE;
@@ -501,7 +506,8 @@ kms_rtp_synchronizer_process_rtp_buffer_mapped (KmsRtpSynchronizer * self,
           self->priv->last_sr_ntp_time - self->priv->base_ntp_time;
       wrapped_up = (diff_ntp_time_ns > (G_MAXUINT64 - GST_BUFFER_PTS (buffer)));
       GST_BUFFER_PTS (buffer) += diff_ntp_time_ns;
-    } else if (self->priv->last_sr_ntp_time < self->priv->base_ntp_time) {
+    }
+    else if (self->priv->last_sr_ntp_time < self->priv->base_ntp_time) {
       diff_ntp_time_ns =
           self->priv->base_ntp_time - self->priv->last_sr_ntp_time;
       wrapped_down = (GST_BUFFER_PTS (buffer) < diff_ntp_time_ns);
@@ -522,7 +528,6 @@ kms_rtp_synchronizer_process_rtp_buffer_mapped (KmsRtpSynchronizer * self,
         && pts_current < self->priv->fs_last_pts_time) {
 
       guint16 seq = gst_rtp_buffer_get_seq (rtp_buffer);
-
       pts_fixed = self->priv->fs_last_pts_time;
 
       GST_WARNING_OBJECT (self,
@@ -534,7 +539,8 @@ kms_rtp_synchronizer_process_rtp_buffer_mapped (KmsRtpSynchronizer * self,
           ", fixed = last: %" GST_TIME_FORMAT,
           ssrc, seq, rtp_ts, self->priv->rtp_ext_ts,
           GST_TIME_ARGS (self->priv->fs_last_pts_time),
-          GST_TIME_ARGS (pts_current), GST_TIME_ARGS (pts_fixed));
+          GST_TIME_ARGS (pts_current),
+          GST_TIME_ARGS (pts_fixed));
 
       GST_BUFFER_PTS (buffer) = pts_fixed;
     }

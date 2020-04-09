@@ -111,7 +111,7 @@ std::string ServerManagerImpl::getKmd (const std::string &moduleName)
 int
 ServerManagerImpl::getCpuCount ()
 {
-  return (int) cpuCount ();
+  return (int)cpuCount ();
 }
 
 float
@@ -119,7 +119,7 @@ ServerManagerImpl::getUsedCpu (int interval)
 {
   struct ::cpustat_t cpustat;
   cpuPercentBegin (&cpustat);
-  std::this_thread::sleep_for (std::chrono::milliseconds (interval) );
+  std::this_thread::sleep_for (std::chrono::milliseconds (interval));
   return cpuPercentEnd (&cpustat);
 }
 
