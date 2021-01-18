@@ -61,37 +61,37 @@ generate_code(
       ${Boost_INCLUDE_DIRS}
       ${Boost_FILESYSTEM_INCLUDE_DIRS}
       ${Boost_SYSTEM_INCLUDE_DIRS}
-      ${gstreamer-1.5_INCLUDE_DIRS}
-      ${gstreamer-sdp-1.5_INCLUDE_DIRS}
+      ${gstreamer-${GST_VERSION}_INCLUDE_DIRS}
+      ${gstreamer-sdp-${GST_VERSION}_INCLUDE_DIRS}
       ${KmsJsonRpc_INCLUDE_DIRS}
   SERVER_IMPL_LIB_EXTRA_LIBRARIES
-      ${gstreamer-sdp-1.5_LIBRARIES}
+      ${gstreamer-sdp-${GST_VERSION}_LIBRARIES}
       ${Boost_LIBRARIES}
-      ${gstreamer-1.5_LIBRARIES}
+      ${gstreamer-${GST_VERSION}_LIBRARIES}
       ${KmsJsonRpc_LIBRARIES}
       kmsutils
       kmsgstcommons
   MODULE_EXTRA_INCLUDE_DIRS
       ${CMAKE_CURRENT_SOURCE_DIR}/../gst-plugins
       ${CMAKE_CURRENT_SOURCE_DIR}/interface
-      ${gstreamer-1.5_INCLUDE_DIRS}
-      ${gstreamer-sdp-1.5_INCLUDE_DIRS}
+      ${gstreamer-${GST_VERSION}_INCLUDE_DIRS}
+      ${gstreamer-sdp-${GST_VERSION}_INCLUDE_DIRS}
       ${KmsJsonRpc_INCLUDE_DIRS}
       ${sigc++-2.0_INCLUDE_DIRS}
       ${glibmm-2.4_INCLUDE_DIRS}
   MODULE_EXTRA_LIBRARIES
-      ${gstreamer-1.5_LIBRARIES}
+      ${gstreamer-${GST_VERSION}_LIBRARIES}
       ${KmsJsonRpc_LIBRARIES}
       ${sigc++-2.0_LIBRARIES}
       ${glibmm-2.4_LIBRARIES}
   SERVER_STUB_DESTINATION
       ${CMAKE_CURRENT_SOURCE_DIR}/implementation/objects
   SERVER_IMPL_LIB_PKGCONFIG_EXTRA_REQUIRES
-      "gstreamer-1.5 gstreamer-sdp-1.5 libjsonrpc sigc++-2.0 glibmm-2.4"
+      "gstreamer-${GST_VERSION} gstreamer-sdp-${GST_VERSION} libjsonrpc sigc++-2.0 glibmm-2.4"
   SERVER_IMPL_LIB_FIND_CMAKE_EXTRA_LIBRARIES
       KmsGstCommons
-      "gstreamer-1.5 ${GST_REQUIRED}"
-      "gstreamer-sdp-1.5 ${GST_REQUIRED}"
+      "gstreamer-${GST_VERSION} ${GST_REQUIRED}"
+      "gstreamer-sdp-${GST_VERSION} ${GST_REQUIRED}"
       "KmsJsonRpc ${JSON_RPC_REQUIRED}"
       "sigc++-2.0 ${sigc++-2.0_REQUIRED}"
       "glibmm-2.4 ${glibmm-2.4_REQUIRED}"

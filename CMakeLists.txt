@@ -82,6 +82,13 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -DHAVE_CONFIG_H")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_CONFIG_H")
 
+if(MSYS)
+  # MSYS2 comes only with the stable version of GStreamer.
+  set(GST_VERSION 1.0)
+else()
+  set(GST_VERSION 1.5)
+endif()
+
 set(GST_REQUIRED ^1.7.1)
 set(JSON_RPC_REQUIRED ^6.7.0)
 set(SIGCPP_REQUIRED ^2.0.10)
@@ -97,22 +104,28 @@ else()
   generic_find(LIBNAME Boost REQUIRED COMPONENTS filesystem regex system thread unit_test_framework)
 endif()
 
-generic_find(LIBNAME gstreamer-1.5 VERSION ${GST_REQUIRED} REQUIRED)
-generic_find(LIBNAME gstreamer-base-1.5 VERSION ${GST_REQUIRED} REQUIRED)
-generic_find(LIBNAME gstreamer-video-1.5 VERSION ${GST_REQUIRED} REQUIRED)
-generic_find(LIBNAME gstreamer-check-1.5 VERSION ${GST_REQUIRED})
-generic_find(LIBNAME gstreamer-sdp-1.5 VERSION ${GST_REQUIRED} REQUIRED)
-generic_find(LIBNAME gstreamer-pbutils-1.5 VERSION ${GST_REQUIRED} REQUIRED)
-generic_find(LIBNAME gstreamer-rtp-1.5 VERSION ${GST_REQUIRED} REQUIRED)
+generic_find(LIBNAME gstreamer-${GST_VERSION} VERSION ${GST_REQUIRED} REQUIRED)
+generic_find(LIBNAME gstreamer-base-${GST_VERSION} VERSION ${GST_REQUIRED} REQUIRED)
+generic_find(LIBNAME gstreamer-video-${GST_VERSION} VERSION ${GST_REQUIRED} REQUIRED)
+generic_find(LIBNAME gstreamer-check-${GST_VERSION} VERSION ${GST_REQUIRED})
+generic_find(LIBNAME gstreamer-sdp-${GST_VERSION} VERSION ${GST_REQUIRED} REQUIRED)
+generic_find(LIBNAME gstreamer-pbutils-${GST_VERSION} VERSION ${GST_REQUIRED} REQUIRED)
+generic_find(LIBNAME gstreamer-rtp-${GST_VERSION} VERSION ${GST_REQUIRED} REQUIRED)
 
 generic_find(LIBNAME KmsJsonRpc VERSION ${JSON_RPC_REQUIRED} REQUIRED)
 generic_find(LIBNAME sigc++-2.0 VERSION ${SIGCPP_REQUIRED} REQUIRED)
 generic_find(LIBNAME glibmm-2.4 VERSION ${GLIBMM_REQUIRED} REQUIRED)
 generic_find(LIBNAME uuid REQUIRED)
 
+if(MSYS)
+  # MSYS2 installs as part of the Linux utils its own variant of libuuid that is
+  # not compatible with the expected one. Specify explicitly where to look for it.
+  set(uuid_LIBRARIES -L"${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" ${uuid_LIBRARIES})
+endif()
+
 find_package(LibVpx REQUIRED)
 
-set(CMAKE_INSTALL_GST_PLUGINS_DIR ${CMAKE_INSTALL_LIBDIR}/gstreamer-1.5)
+set(CMAKE_INSTALL_GST_PLUGINS_DIR ${CMAKE_INSTALL_LIBDIR}/gstreamer-${GST_VERSION})
 
 enable_testing()
 

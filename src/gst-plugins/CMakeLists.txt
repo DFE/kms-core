@@ -29,10 +29,10 @@ add_dependencies(${LIBRARY_NAME}plugins kmsgstcommons)
 
 set_property (TARGET ${LIBRARY_NAME}plugins
   PROPERTY INCLUDE_DIRECTORIES
-    ${gstreamer-1.5_INCLUDE_DIRS}
-    ${gstreamer-base-1.5_INCLUDE_DIRS}
-    ${gstreamer-sdp-1.5_INCLUDE_DIRS}
-    ${gstreamer-pbutils-1.5_INCLUDE_DIRS}
+    ${gstreamer-${GST_VERSION}_INCLUDE_DIRS}
+    ${gstreamer-base-${GST_VERSION}_INCLUDE_DIRS}
+    ${gstreamer-sdp-${GST_VERSION}_INCLUDE_DIRS}
+    ${gstreamer-pbutils-${GST_VERSION}_INCLUDE_DIRS}
     ${CMAKE_CURRENT_BINARY_DIR}/../../
     ${CMAKE_CURRENT_BINARY_DIR}/commons/
     ${CMAKE_CURRENT_SOURCE_DIR}/commons/
@@ -40,10 +40,10 @@ set_property (TARGET ${LIBRARY_NAME}plugins
 
 target_link_libraries(${LIBRARY_NAME}plugins
   kmsgstcommons
-  ${gstreamer-1.5_LIBRARIES}
-  ${gstreamer-base-1.5_LIBRARIES}
-  ${gstreamer-sdp-1.5_LIBRARIES}
-  ${gstreamer-pbutils-1.5_LIBRARIES}
+  ${gstreamer-${GST_VERSION}_LIBRARIES}
+  ${gstreamer-base-${GST_VERSION}_LIBRARIES}
+  ${gstreamer-sdp-${GST_VERSION}_LIBRARIES}
+  ${gstreamer-pbutils-${GST_VERSION}_LIBRARIES}
 )
 
 install(
