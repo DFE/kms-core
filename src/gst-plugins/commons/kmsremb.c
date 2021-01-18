@@ -298,7 +298,7 @@ kms_remb_local_get_video_recv_info (KmsRembLocal * self,
     return FALSE;
   }
   GST_LOG_OBJECT (KMS_REMB_BASE (self)->rtpsess,
-      "KmsRembLocal: New stats from %u source(s), %lu packets",
+      "KmsRembLocal: New stats from %u source(s), %" G_GUINT64_FORMAT " packets",
       data.count, data.packets_received_expected_interval_accumulative);
 
   current_time = kms_utils_get_time_nsecs ();
