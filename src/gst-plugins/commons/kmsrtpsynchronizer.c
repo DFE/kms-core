@@ -19,6 +19,10 @@
 #include <glib/gstdio.h>
 
 #include <sys/stat.h>  // 'ACCESSPERMS' is not POSIX, requires GNU extensions in GCC
+// 'ACCESSPERMS' is not available on MSYS2
+#ifndef ACCESSPERMS
+  #define ACCESSPERMS (S_IRWXU|S_IRWXG|S_IRWXO)
+#endif
 
 #define GST_DEFAULT_NAME "rtpsynchronizer"
 GST_DEBUG_CATEGORY_STATIC (kms_rtp_synchronizer_debug_category);
