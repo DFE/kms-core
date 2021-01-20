@@ -18,7 +18,11 @@
 #include "ServerInfo.hpp"
 #include "MediaPipelineImpl.hpp"
 #include "ServerManagerImpl.hpp"
-#include "process-tools/linux-process.hpp"
+#ifdef _WIN32
+  #include "process-tools/windows-process.hpp"
+#else
+  #include "process-tools/linux-process.hpp"
+#endif
 #include <jsonrpc/JsonSerializer.hpp>
 #include <KurentoException.hpp>
 #include <MediaSet.hpp>

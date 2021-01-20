@@ -7,6 +7,22 @@ set(KMS_CORE_INTERFACE_HEADERS
   interface/KurentoException.hpp
 )
 
+if(MSYS)
+  set(KMS_CORE_IMPL_OS_SOURCES
+    implementation/process-tools/windows-process.cpp)
+else()
+  set(KMS_CORE_IMPL_OS_SOURCES
+    implementation/process-tools/linux-process.cpp)
+endif()
+
+if(MSYS)
+  set(KMS_CORE_IMPL_OS_HEADERS
+    implementation/process-tools/windows-process.hpp)
+else()
+  set(KMS_CORE_IMPL_OS_HEADERS
+    implementation/process-tools/linux-process.hpp)
+endif()
+
 set(KMS_CORE_IMPL_SOURCES
   implementation/EventHandler.cpp
   implementation/Factory.cpp
@@ -16,7 +32,7 @@ set(KMS_CORE_IMPL_SOURCES
   implementation/UUIDGenerator.cpp
   implementation/RegisterParent.cpp
   implementation/DotGraph.cpp
-  implementation/process-tools/linux-process.cpp
+  ${KMS_CORE_IMPL_OS_SOURCES}
 )
 
 set(KMS_CORE_IMPL_HEADERS
@@ -30,7 +46,7 @@ set(KMS_CORE_IMPL_HEADERS
   implementation/RegisterParent.hpp
   implementation/DotGraph.hpp
   implementation/SignalHandler.hpp
-  implementation/process-tools/linux-process.hpp
+  ${KMS_CORE_IMPL_OS_HEADERS}
 )
 
 include(CodeGenerator)

@@ -28,6 +28,8 @@
 GST_DEBUG_CATEGORY_STATIC (GST_CAT_DEFAULT);
 #define GST_DEFAULT_NAME "KurentoModuleManager"
 
+#define KURENTO_MODULE_SUFFIX "." G_MODULE_SUFFIX
+
 namespace kurento
 {
 
@@ -170,7 +172,7 @@ ModuleManager::loadModules (std::string dirPath)
     if (boost::filesystem::is_regular (*itr) ) {
       boost::filesystem::path extension = itr->path().extension();
 
-      if (extension.string() == ".so") {
+      if (extension.string() == KURENTO_MODULE_SUFFIX) {
         GST_DEBUG ("Found file: %s", itr->path().string().c_str() );
         loadModule (itr->path().string() );
       }
@@ -191,8 +193,19 @@ ModuleManager::loadModulesFromDirectories (std::string path)
     this->loadModules (location);
   }
 
+#ifdef _WIN32
+  gchar *app_dir = g_win32_get_package_installation_directory_of_module (NULL);
+
+  if (app_dir) {
+    std::string module_dir = std::string (app_dir) + "\\lib\\kurento\\modules";
+    this->loadModules (module_dir);
+    g_free (app_dir);
+  }
+
+#else
   //try to load modules from the default path
   this->loadModules (KURENTO_MODULES_DIR);
+#endif
 
   return;
 }

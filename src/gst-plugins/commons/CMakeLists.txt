@@ -19,11 +19,16 @@ set_property(TARGET sdputils
     ${gstreamer-pbutils-${GST_VERSION}_INCLUDE_DIRS}
 )
 
+if(MSYS)
+  set(TARGET_OS_LINK_LIBRARIES ws2_32)
+endif()
+
 target_link_libraries(sdputils
   ${gstreamer-${GST_VERSION}_LIBRARIES}
   ${gstreamer-base-${GST_VERSION}_LIBRARIES}
   ${gstreamer-sdp-${GST_VERSION}_LIBRARIES}
   ${gstreamer-pbutils-${GST_VERSION}_LIBRARIES}
+  ${TARGET_OS_LINK_LIBRARIES}
 )
 
 set_target_properties(sdputils PROPERTIES
@@ -197,6 +202,7 @@ target_link_libraries(kmsgstcommons
   sdputils
   kmsrefstruct
   kmssdpagent
+  ${TARGET_OS_LINK_LIBRARIES}
   ${gstreamer-${GST_VERSION}_LIBRARIES}
   ${gstreamer-base-${GST_VERSION}_LIBRARIES}
   ${gstreamer-sdp-${GST_VERSION}_LIBRARIES}
